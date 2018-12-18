@@ -17,14 +17,15 @@
         
         // If no URL entered, return warning message
         if(imageURL == ""){
+            console.log("Please enter URL...");
             return "Please enter a URL!";
         }
 
-        // If imageURL passes input checks
+         // If imageURL passes input checks
         var xhttp = new XMLHttpRequest();
 
         // Replace with valid subscription key accordingly
-        var subscriptionKey = "34fcc5cc47cf4db293f50f9ce74c5004";
+        var subscriptionKey = "6ea075b7325c4df79d8464695622b2e1";
 
         // You must use the same Azure region in your REST API method as you used to
         // get your subscription keys.
@@ -32,23 +33,46 @@
             "https://southeastasia.api.cognitive.microsoft.com/vision/v2.0/analyze";
 
         // Data containing image URL to send in POST request
-        var data =  '{"url": ' + '"' + imageUrl + '"}'
-
+        var data =  {"url": imageURL};
+        
         // Request parameters.
         // Ref: https://westus.dev.cognitive.microsoft.com/docs/services/5adf991815e1060e6355ad44/operations/56f91f2e778daf14a499e1fa
         var params = {
-            "visualFeatures": "Description, Tags",
+            "visualFeatures": "Description",
             "details": "",
             "language": "en",
         };
+        
+        // Append all parameters to url string
+        var url = new URL(uriBase);
+        for (var key in params){
+            url.searchParams.append(key, params[key]);
+        }
+        
+        // Open request
+        xhttp.open("POST", URL);
 
-        xhttp.open("POST", '')
+        // Call a function when the state changes.
+        xhttp.onreadystatechange = function() {
+            response = true;
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                var response = JSON.parse(this.response);
+                caption = response["description"]["captions"][0]["text"];
+                console.log(caption);
+                return caption;
+            }
+            else{
+                return "Invalid URL!";
+            }
+        }
 
         // Set Request headers for XMLHttpRequest
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
 
-        return imageURL;
+        // Send request with imageURL data
+        xhttp.send(JSON.stringify(data));
+
     };
 
     // Block and block menu descriptions
