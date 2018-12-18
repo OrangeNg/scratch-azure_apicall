@@ -51,7 +51,6 @@
         
         // Open request
         xhttp.open("POST", url, false); //false to sync/wait till request complete
-        xhttp.timeout = 10000; // Maximum wait for 10s
 
         // Set Request headers for XMLHttpRequest
         xhttp.setRequestHeader("Content-Type", "application/json");
