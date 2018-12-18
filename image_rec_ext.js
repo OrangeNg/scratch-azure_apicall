@@ -12,7 +12,7 @@
         return {status: 2, msg: 'Ready'};
     };
 
-    // Function for image url block
+    // Function for block that analyses image based on image URL
     ext.recogImageByURL = function(imageURL) {
         
         // If no URL entered, return warning message
@@ -21,7 +21,7 @@
             return "Please enter a URL!";
         }
 
-         // If imageURL passes input checks
+        // If imageURL passes input checks
         var xhttp = new XMLHttpRequest();
 
         // Replace with valid subscription key accordingly
@@ -50,7 +50,8 @@
         }
         
         // Open request
-        xhttp.open("POST", url, false); //false to sync/wait
+        xhttp.open("POST", url, false); //false to sync/wait till request complete
+        xhttp.timeout = 10000; // Maximum wait for 10s
 
         // Set Request headers for XMLHttpRequest
         xhttp.setRequestHeader("Content-Type", "application/json");
@@ -59,15 +60,15 @@
         // Send request with imageURL data
         xhttp.send(JSON.stringify(data));
 
-        console.log('here');
-        // Call a function when the state changes.
+        // If response is ready and request is successful/no errors
         if (xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
             var response = JSON.parse(xhttp.response);
             caption = response["description"]["captions"][0]["text"];
-            console.log('here4');
             console.log(caption);
             return caption;
         }
+        // Display invalid URL for all remaining errors and highlight error 
+        // in console with status code
         else{
             console.log("xhttp.readState:", xhttp.readyState);
             console.log("xhttp.status:", xhttp.status);
