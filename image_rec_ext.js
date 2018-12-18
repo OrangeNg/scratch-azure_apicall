@@ -50,21 +50,7 @@
         }
         
         // Open request
-        xhttp.open("POST", URL);
-
-        // Call a function when the state changes.
-        xhttp.onreadystatechange = function() {
-            response = true;
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                var response = JSON.parse(this.response);
-                caption = response["description"]["captions"][0]["text"];
-                console.log(caption);
-                return caption;
-            }
-            else{
-                return "Invalid URL!";
-            }
-        }
+        xhttp.open("POST", url, false); //false to sync/wait
 
         // Set Request headers for XMLHttpRequest
         xhttp.setRequestHeader("Content-Type", "application/json");
@@ -73,6 +59,20 @@
         // Send request with imageURL data
         xhttp.send(JSON.stringify(data));
 
+        console.log('here');
+        // Call a function when the state changes.
+        if (xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
+            var response = JSON.parse(xhttp.response);
+            caption = response["description"]["captions"][0]["text"];
+            console.log('here4');
+            console.log(caption);
+            return caption;
+        }
+        else{
+            console.log("xhttp.readState:", xhttp.readyState);
+            console.log("xhttp.status:", xhttp.status);
+            return "Invalid URL!";
+        }
     };
 
     // Block and block menu descriptions
