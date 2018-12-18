@@ -62,8 +62,10 @@
         // If response is ready and request is successful/no errors
         if (xhttp.readyState === XMLHttpRequest.DONE && xhttp.status === 200) {
             var response = JSON.parse(xhttp.response);
+            // Takes in caption returned from API call
             caption = response["description"]["captions"][0]["text"];
             console.log(caption);
+            // Displays caption
             return caption;
         }
         // Display invalid URL for all remaining errors and highlight error 
